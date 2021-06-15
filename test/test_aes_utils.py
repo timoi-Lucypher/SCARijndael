@@ -4,9 +4,9 @@ import numpy as np
 sys.path.insert(1, '..')
 
 from aes_utils import SBOX
-from aes_utils import SubBytes
-from aes_utils import ShiftRows
-from aes_utils import MixColumns
+from aes_utils import SubBytes, invSubBytes
+from aes_utils import ShiftRows, invShiftRows
+from aes_utils import MixColumns, invMixColumns
 from aes_utils import AddRoundKey
 from aes_utils import ExpandKeys
 from aes_reference import AES as refAES
@@ -25,6 +25,12 @@ def test_SubBytes():
 
     assert np.all(goods == updated)
 
+def test_invSubBytes():
+    pts = np.random.randint(0, 256,
+                           size=(200,4,4), dtype=np.uint8)
+    subs = SubBytes(pts)
+    unsubs = invSubBytes(subs)
+    assert np.all(unsubs == pts)
 
 def test_ShiftRows():
     pts = np.random.randint(0, 256,
@@ -37,6 +43,14 @@ def test_ShiftRows():
     updated = ShiftRows(pts)
 
     assert np.all(goods == updated)
+
+
+def test_invShiftRows():
+    pts = np.random.randint(0, 256,
+                           size=(200,4,4), dtype=np.uint8)
+    shifted = ShiftRows(pts)
+    unshifted = invShiftRows(shifted)
+    assert np.all(unshifted == pts)
 
 
 def test_MixColumns():
@@ -53,6 +67,15 @@ def test_MixColumns():
     updated = MixColumns(pts)
 
     assert np.all(goods == updated)
+
+def test_invMixColumns():
+    pts = np.random.randint(0, 256,
+                           size=(200,4,4), dtype=np.uint8)
+
+    mixed = MixColumns(pts)
+    unmixed = invMixColumns(mixed)
+
+    assert np.all(unmixed == pts)
 
 
 def test_AddRoundKey():
