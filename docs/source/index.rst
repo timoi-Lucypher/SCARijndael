@@ -18,3 +18,17 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+AES utils
+----------
+.. automodule:: aes_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+AES
+----------
+.. automodule:: aes
+   :members:
+   :undoc-members:
+   :show-inheritance:

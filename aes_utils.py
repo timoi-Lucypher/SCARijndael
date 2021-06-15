@@ -1,15 +1,4 @@
 import numpy as np
-import galois
-
-G256 = galois.GF(2**8)
-
-MIX_COLUMNS_MAT = G256(
-    [
-        [2, 3, 1, 1],
-        [1, 2, 3, 1],
-        [1, 1, 2, 3],
-        [3, 1, 1, 2]
-    ])
 
 SBOX = np.array([
         0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
@@ -66,7 +55,7 @@ RCON = np.array([
 
 def ExpandKeys(key: np.ndarray):
     '''
-    Numpy implementation of the ExpandKeys
+    Almost Numpy implementation of the ExpandKeys
     function.
 
     :param key: The (4, 4) array master key.
@@ -116,16 +105,17 @@ def ShiftRows(states: np.ndarray):
     :param states: (N, 4, 4) numpy array
     :return: the updated states
     '''
-    s0 = states[:, 0]
-    s1 = states[:, 1]
-    s2 = states[:, 2]
-    s3 = states[:, 3]
+    s0 = states[:, :, 0].reshape(states.shape[0], 4)
+    s1 = states[:, :, 1].reshape(states.shape[0], 4)
+    s2 = states[:, :, 2].reshape(states.shape[0], 4)
+    s3 = states[:, :, 3].reshape(states.shape[0], 4)
 
     r1 = np.roll(s1, -1, axis=1)
     r2 = np.roll(s2, -2, axis=1)
     r3 = np.roll(s3, -3, axis=1)
 
-    return np.hstack((s0, r1, r2, r3)).reshape(states.shape[0], 4, 4)
+    res = np.hstack((s0, r1, r2, r3)).reshape(states.shape[0], 4, 4)
+    return res.transpose((0, 2, 1))
 
 
 def MixColumns(states: np.ndarray):
@@ -137,8 +127,18 @@ def MixColumns(states: np.ndarray):
     :param states: (N, 4, 4) numpy array
     :return: the updated states
     '''
-    g_states = G256(states)
-    res = []
-    for g_s in g_states:
-        res.append(np.matmul(MIX_COLUMNS_MAT, g_s))
-    return np.array(res, dtype=np.uint8)
+    r = states
+    res = np.zeros(states.shape, dtype=np.uint8)
+
+    h = (r >> 7) & 1
+    b = r << 1
+    b = b ^ (h * 0x1B)
+    # 2 * a0 + a3 + a2 + 3 * a1
+    res[:,:,0] = b[:,:,0] ^ r[:,:,3] ^ r[:,:,2] ^ b[:,:,1] ^ r[:,:,1]
+    # 2 * a1 + a0 + a3 + 3 * a2
+    res[:,:,1] = b[:,:,1] ^ r[:,:,0] ^ r[:,:,3] ^ b[:,:,2] ^ r[:,:,2]
+    # 2 * a2 + a1 + a0 + 3 * a3
+    res[:,:,2] = b[:,:,2] ^ r[:,:,1] ^ r[:,:,0] ^ b[:,:,3] ^ r[:,:,3]
+    #2 * a3 + a2 + a1 + 3 * a0 
+    res[:,:,3] = b[:,:,3] ^ r[:,:,2] ^ r[:,:,1] ^ b[:,:,0] ^ r[:,:,0]
+    return res
