@@ -1,7 +1,7 @@
 import numpy as np
-from aes_utils import MixColumns, SubBytes, ShiftRows
-from aes_utils import invMixColumns, invSubBytes, invShiftRows
-from aes_utils import ExpandKeys, AddRoundKey
+from npcrypto.aes_utils import MixColumns, SubBytes, ShiftRows
+from npcrypto.aes_utils import invMixColumns, invSubBytes, invShiftRows
+from npcrypto.aes_utils import ExpandKeys, AddRoundKey
 
 
 class AES:
