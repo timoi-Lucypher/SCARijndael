@@ -1,5 +1,5 @@
-# SCARijndael
-Rijndael numpy implementation designed to help side-channel cryptanalysis
+# npCrypto
+Numpy implementation of some crypto primitives.
 
 ## Environement setup
 You need to setup the environement before starting.
