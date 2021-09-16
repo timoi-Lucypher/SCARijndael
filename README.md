@@ -16,6 +16,11 @@ Then, you must install the project required packages:
 pip install -r requirements.txt
 ```
 
+Finally you can install the npcrypto package:
+```bash
+pip install -e .
+```
+
 ## Build the documentation
 
 ```bash
