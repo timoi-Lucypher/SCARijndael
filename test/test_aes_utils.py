@@ -1,14 +1,13 @@
 import sys
 import numpy as np
 
-sys.path.insert(1, '..')
 
-from aes_utils import SBOX
-from aes_utils import SubBytes, invSubBytes
-from aes_utils import ShiftRows, invShiftRows
-from aes_utils import MixColumns, invMixColumns
-from aes_utils import AddRoundKey
-from aes_utils import ExpandKeys
+from npcrypto.aes_utils import SBOX
+from npcrypto.aes_utils import SubBytes, invSubBytes
+from npcrypto.aes_utils import ShiftRows, invShiftRows
+from npcrypto.aes_utils import MixColumns, invMixColumns
+from npcrypto.aes_utils import AddRoundKey
+from npcrypto.aes_utils import ExpandKeys
 from aes_reference import AES as refAES
 from aes_reference import text2matrix
 

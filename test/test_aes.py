@@ -1,9 +1,8 @@
 import sys
 import numpy as np
 from Crypto.Cipher import AES as pyAES
-sys.path.insert(1, '..')
 from aes_reference import AES as refAES
-from aes import AES
+from npcrypto.aes import AES
 
 
 def test_encryption():
