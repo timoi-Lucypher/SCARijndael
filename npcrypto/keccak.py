@@ -127,6 +127,25 @@ def permutation(states: np.ndarray):
     :param states: (N, 25) Keccak state.
     :return: The updated states.
 
+    - Example::
+
+        >>> import numpy as np
+        >>> from npcrypto.keccak import permutation
+        >>> states = np.random.randint(0, 256, size=(2, 25), dtype=np.uint8)
+        >>> states
+        array([[244, 237, 146, 136, 194, 119, 230,  20,  38, 153, 174,  61, 167,
+                242, 195, 179,   8,   8, 136,  17, 205, 246,   3, 170, 138],
+               [ 58,  11, 187, 245, 222, 188,  53, 201, 253, 243, 189, 249,  92,
+                101,  85,  40, 249,  90, 163,  52,   6,  12, 171, 222, 127]],
+              dtype=uint8)
+        >>> permutation(states)
+        array([[ 41,  65, 240,  43,  90, 191, 154,  77,  96, 226,  90,  29, 231,
+                175, 191, 227, 209,  75, 126, 230, 237, 185, 198,  91, 166],
+               [ 63, 140, 202, 213,  82, 102, 207,  20, 201,  81, 243,  22, 107,
+                233, 116,  81,  64, 106, 110,  44, 177,  10,  56,  49, 220]],
+              dtype=uint8)
+
+
     '''
     for i in range(MAX_ROUNDS):
         states = keccak_round(states, i)

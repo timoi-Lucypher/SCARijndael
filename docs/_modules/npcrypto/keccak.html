@@ -190,6 +190,25 @@
 <span class="sd">    :param states: (N, 25) Keccak state.</span>
 <span class="sd">    :return: The updated states.</span>
 
+<span class="sd">    - Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from npcrypto.keccak import permutation</span>
+<span class="sd">        &gt;&gt;&gt; states = np.random.randint(0, 256, size=(2, 25), dtype=np.uint8)</span>
+<span class="sd">        &gt;&gt;&gt; states</span>
+<span class="sd">        array([[244, 237, 146, 136, 194, 119, 230,  20,  38, 153, 174,  61, 167,</span>
+<span class="sd">                242, 195, 179,   8,   8, 136,  17, 205, 246,   3, 170, 138],</span>
+<span class="sd">               [ 58,  11, 187, 245, 222, 188,  53, 201, 253, 243, 189, 249,  92,</span>
+<span class="sd">                101,  85,  40, 249,  90, 163,  52,   6,  12, 171, 222, 127]],</span>
+<span class="sd">              dtype=uint8)</span>
+<span class="sd">        &gt;&gt;&gt; permutation(states)</span>
+<span class="sd">        array([[ 41,  65, 240,  43,  90, 191, 154,  77,  96, 226,  90,  29, 231,</span>
+<span class="sd">                175, 191, 227, 209,  75, 126, 230, 237, 185, 198,  91, 166],</span>
+<span class="sd">               [ 63, 140, 202, 213,  82, 102, 207,  20, 201,  81, 243,  22, 107,</span>
+<span class="sd">                233, 116,  81,  64, 106, 110,  44, 177,  10,  56,  49, 220]],</span>
+<span class="sd">              dtype=uint8)</span>
+
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">MAX_ROUNDS</span><span class="p">):</span>
         <span class="n">states</span> <span class="o">=</span> <span class="n">keccak_round</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
