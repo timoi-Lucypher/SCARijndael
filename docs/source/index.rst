@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to SCARijndael's documentation!
+Welcome to npCrypto's documentation!
 =======================================
 
 .. toctree::
@@ -21,14 +21,21 @@ Indices and tables
 
 AES utils
 ----------
-.. automodule:: aes_utils
+.. automodule:: npcrypto.aes_utils
    :members:
    :undoc-members:
    :show-inheritance:
 
 AES
 ----------
-.. automodule:: aes
+.. automodule:: npcrypto.aes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Keccak
+----------
+.. automodule:: npcrypto.keccak
    :members:
    :undoc-members:
    :show-inheritance:
