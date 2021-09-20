@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to npCrypto’s documentation! &mdash; npCrypto 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> npCrypto
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Welcome to npCrypto’s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
+<li><a class="reference internal" href="#module-npcrypto.aes_utils">AES utils</a></li>
+<li><a class="reference internal" href="#module-npcrypto.aes">AES</a></li>
+<li><a class="reference internal" href="#module-npcrypto.keccak">Keccak</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">npCrypto</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Welcome to npCrypto’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-npcrypto-s-documentation">
+<h1>Welcome to npCrypto’s documentation!<a class="headerlink" href="#welcome-to-npcrypto-s-documentation" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<section id="module-npcrypto.aes_utils">
+<span id="aes-utils"></span><h2>AES utils<a class="headerlink" href="#module-npcrypto.aes_utils" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.AddRoundKey">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">AddRoundKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#AddRoundKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.AddRoundKey" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the AddRoundKey
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> – (N, 4, 4) numpy array</p></li>
+<li><p><strong>rk</strong> – (4, 4) round key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.ExpandKeys">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">ExpandKeys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#ExpandKeys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.ExpandKeys" title="Permalink to this definition"></a></dt>
+<dd><p>Almost Numpy implementation of the ExpandKeys
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – The (4, 4) array master key.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A (11, 4, 4) array reprensenting
+the AES round keys</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.MixColumns">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">MixColumns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#MixColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.MixColumns" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the MixColumns
+function. Uses galois field matrix
+multiplication using precomputed
+tables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 4, 4) numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.ShiftRows">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">ShiftRows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#ShiftRows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.ShiftRows" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the ShiftRows
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 4, 4) numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.SubBytes">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">SubBytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#SubBytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.SubBytes" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the SubBytes
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 4, 4) numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.invMixColumns">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">invMixColumns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#invMixColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.invMixColumns" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the invMixColumns
+function. Uses galois field matrix
+multiplication using precomputed
+tables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 4, 4) numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.invShiftRows">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">invShiftRows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#invShiftRows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.invShiftRows" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the invShiftRows
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 4, 4) numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.aes_utils.invSubBytes">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">invSubBytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#invSubBytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.invSubBytes" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of the invSubBytes
+function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 4, 4) numpy array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-npcrypto.aes">
+<span id="aes"></span><h2>AES<a class="headerlink" href="#module-npcrypto.aes" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="npcrypto.aes.AES">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">npcrypto.aes.</span></span><span class="sig-name descname"><span class="pre">AES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes.html#AES"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes.AES" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="npcrypto.aes.AES.decrypt">
+<span class="sig-name descname"><span class="pre">decrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes.html#AES.decrypt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes.AES.decrypt" title="Permalink to this definition"></a></dt>
+<dd><p>Encryption of multiple plaintexts</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pts</strong> – (N, 4, 4) plaintext array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(N, 4, 4) ciphertexts</p>
+</dd>
+</dl>
+<ul>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mh">0x2b</span><span class="p">,</span> <span class="mh">0x7e</span><span class="p">,</span> <span class="mh">0x15</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x28</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0xd2</span><span class="p">,</span> <span class="mh">0xa6</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0xab</span><span class="p">,</span> <span class="mh">0xf7</span><span class="p">,</span> <span class="mh">0x15</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x09</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+<span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">ciphertexts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">plaintexts</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">ciphertexts</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="npcrypto.aes.AES.encrypt">
+<span class="sig-name descname"><span class="pre">encrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes.html#AES.encrypt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes.AES.encrypt" title="Permalink to this definition"></a></dt>
+<dd><p>Encryption of multiple plaintexts</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pts</strong> – (N, 4, 4) plaintext array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(N, 4, 4) ciphertexts</p>
+</dd>
+</dl>
+<ul>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mh">0x2b</span><span class="p">,</span> <span class="mh">0x7e</span><span class="p">,</span> <span class="mh">0x15</span><span class="p">,</span> <span class="mh">0x16</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x28</span><span class="p">,</span> <span class="mh">0xae</span><span class="p">,</span> <span class="mh">0xd2</span><span class="p">,</span> <span class="mh">0xa6</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0xab</span><span class="p">,</span> <span class="mh">0xf7</span><span class="p">,</span> <span class="mh">0x15</span><span class="p">,</span> <span class="mh">0x88</span><span class="p">],</span>
+    <span class="p">[</span><span class="mh">0x09</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0x4f</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+<span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">ciphertexts</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-npcrypto.keccak">
+<span id="keccak"></span><h2>Keccak<a class="headerlink" href="#module-npcrypto.keccak" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.ROL8">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">ROL8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#ROL8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.ROL8" title="Permalink to this definition"></a></dt>
+<dd><p>Elementwise 8 bit roll of given offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> – (N, 5, 5) Keccak states.</p></li>
+<li><p><strong>offset</strong> – left rolling offset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.chi">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">chi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#chi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.chi" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of keccak Chi fuction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 25) Keccak state.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.iota">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">iota</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#iota"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.iota" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of keccak Iota fuction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> – (N, 25) Keccak state.</p></li>
+<li><p><strong>round_index</strong> – the round index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.keccak_round">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">keccak_round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#keccak_round"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.keccak_round" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of one keccak round.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> – (N, 25) Keccak state.</p></li>
+<li><p><strong>round_index</strong> – the round index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.permutation">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">permutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#permutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.permutation" title="Permalink to this definition"></a></dt>
+<dd><p>Perform Keccak cryptographic permutation over
+an numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 25) Keccak state.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.pi">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">pi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#pi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.pi" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of keccak Pi fuction.
+Uses a precomputed permutation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 25) Keccak state.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.rho">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">rho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#rho"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.rho" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of keccak Rho fuction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 25) Keccak state.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.keccak.theta">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">theta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#theta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.theta" title="Permalink to this definition"></a></dt>
+<dd><p>Numpy implementation of keccak Theta fuction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>states</strong> – (N, 25) Keccak state.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The updated states.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Timoï.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
