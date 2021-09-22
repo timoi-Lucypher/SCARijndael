@@ -22,4 +22,4 @@ pip install -e .
 ```
 
 ## Documentation
-Full project documentation is accessible [here][https://timoi-lucypher.github.io/npCrypto/]
+Full project documentation is accessible at https://timoi-lucypher.github.io/npCrypto/
