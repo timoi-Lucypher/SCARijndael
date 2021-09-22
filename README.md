@@ -21,15 +21,5 @@ Finally you can install the npcrypto package:
 pip install -e .
 ```
 
-## Build the documentation
-
-```bash
-cd docs
-make html
-```
-
-You can now access the html version of the documentation
-
-```bash
-<your navigator> build/html/index.html
-```
+## Documentation
+Full project documentation is accessible [here][https://timoi-lucypher.github.io/npCrypto/]
