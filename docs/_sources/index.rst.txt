@@ -6,6 +6,8 @@
 Welcome to npCrypto's documentation!
 =======================================
 
+npCrypto is a project which goal is to provide Numpy friendly cryptographic primitives.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -19,8 +21,10 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-AES utils
-----------
+AES helper functions
+---------------------
+This module implements several AES sub functions.
+
 .. automodule:: npcrypto.aes_utils
    :members:
    :undoc-members:
@@ -35,6 +39,8 @@ AES
 
 Keccak
 ----------
+The Keccak cryptographic permutation is used within several cryptosystems such as SHA3 or Elephant.
+
 .. automodule:: npcrypto.keccak
    :members:
    :undoc-members:

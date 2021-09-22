@@ -39,9 +39,9 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Welcome to npCrypto’s documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
-<li><a class="reference internal" href="#module-npcrypto.aes_utils">AES utils</a></li>
+<li><a class="reference internal" href="#aes-helper-functions">AES helper functions</a></li>
 <li><a class="reference internal" href="#module-npcrypto.aes">AES</a></li>
-<li><a class="reference internal" href="#module-npcrypto.keccak">Keccak</a></li>
+<li><a class="reference internal" href="#keccak">Keccak</a></li>
 </ul>
 </li>
 </ul>
@@ -72,6 +72,7 @@
              
   <section id="welcome-to-npcrypto-s-documentation">
 <h1>Welcome to npCrypto’s documentation!<a class="headerlink" href="#welcome-to-npcrypto-s-documentation" title="Permalink to this headline"></a></h1>
+<p>npCrypto is a project which goal is to provide Numpy friendly cryptographic primitives.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -82,9 +83,10 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<section id="module-npcrypto.aes_utils">
-<span id="aes-utils"></span><h2>AES utils<a class="headerlink" href="#module-npcrypto.aes_utils" title="Permalink to this headline"></a></h2>
-<dl class="py function">
+<section id="aes-helper-functions">
+<h2>AES helper functions<a class="headerlink" href="#aes-helper-functions" title="Permalink to this headline"></a></h2>
+<p>This module implements several AES sub functions.</p>
+<span class="target" id="module-npcrypto.aes_utils"></span><dl class="py function">
 <dt class="sig sig-object py" id="npcrypto.aes_utils.AddRoundKey">
 <span class="sig-prename descclassname"><span class="pre">npcrypto.aes_utils.</span></span><span class="sig-name descname"><span class="pre">AddRoundKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rk</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes_utils.html#AddRoundKey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes_utils.AddRoundKey" title="Permalink to this definition"></a></dt>
 <dd><p>Numpy implementation of the AddRoundKey
@@ -284,9 +286,10 @@ function.</p>
 </dd></dl>
 
 </section>
-<section id="module-npcrypto.keccak">
-<span id="keccak"></span><h2>Keccak<a class="headerlink" href="#module-npcrypto.keccak" title="Permalink to this headline"></a></h2>
-<dl class="py function">
+<section id="keccak">
+<h2>Keccak<a class="headerlink" href="#keccak" title="Permalink to this headline"></a></h2>
+<p>The Keccak cryptographic permutation is used within several cryptosystems such as SHA3 or Elephant.</p>
+<span class="target" id="module-npcrypto.keccak"></span><dl class="py function">
 <dt class="sig sig-object py" id="npcrypto.keccak.ROL8">
 <span class="sig-prename descclassname"><span class="pre">npcrypto.keccak.</span></span><span class="sig-name descname"><span class="pre">ROL8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">states</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/keccak.html#ROL8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.keccak.ROL8" title="Permalink to this definition"></a></dt>
 <dd><p>Elementwise 8 bit roll of given offset.</p>
