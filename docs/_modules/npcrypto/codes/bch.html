@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>npcrypto.codes.bch &mdash; npCrypto 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> npCrypto
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">npCrypto</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>npcrypto.codes.bch</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for npcrypto.codes.bch</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Poly</span>
+<span class="kn">from</span> <span class="nn">npcrypto.codes.polynomial_helpers</span> <span class="kn">import</span> <span class="n">get_gen_poly</span>
+<span class="kn">from</span> <span class="nn">npcrypto.codes.poly_gf2</span> <span class="kn">import</span> <span class="n">p_mul</span><span class="p">,</span> <span class="n">p_add</span><span class="p">,</span> <span class="n">p_div</span><span class="p">,</span> <span class="n">p2a</span>
+<span class="c1"># Most of the inspiration came from the following documents:</span>
+<span class="c1"># http://www.comlab.hut.fi/studies/3410/slides_08_6_4.pdf</span>
+<span class="c1"># https://github.com/jkrauze/bch/tree/master/bch</span>
+
+
+<div class="viewcode-block" id="Encoder"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.bch.Encoder">[docs]</a><span class="k">class</span> <span class="nc">Encoder</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class enumerates the different</span>
+<span class="sd">    encoding paradigms: systematic and</span>
+<span class="sd">    non systematic.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">systematic</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">non_systematic</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="BCH"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.bch.BCH">[docs]</a><span class="k">class</span> <span class="nc">BCH</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class represents a BCH code.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="BCH.__init__"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.bch.BCH.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        BCH codes are designed thanks to various parameters.</span>
+<span class="sd">        </span>
+<span class="sd">        :param n: length of the codeword.</span>
+<span class="sd">        :param m: dimention of the Galois field (2^m).</span>
+<span class="sd">        :param k: message bits.</span>
+<span class="sd">        :param t: Correction capacity of the BCH code (in bits).</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Checking some properties of the code</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;m must be superior to 3&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">2</span><span class="o">**</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;n must be equal to 2**m-1&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">-</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">m</span> <span class="o">*</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;must assure n - k &lt; m * t&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must assure t &lt; 2**m - 1&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+
+        <span class="n">irr</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">get_gen_poly</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">irr_poly</span> <span class="o">=</span> <span class="n">p2a</span><span class="p">(</span><span class="n">irr</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span> <span class="o">=</span> <span class="n">p2a</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="c1"># Minimal distance of the code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dmin</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must assure that dmin &gt; 2 * t + 1&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BCH.set_generator"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.bch.BCH.set_generator">[docs]</a>    <span class="k">def</span> <span class="nf">set_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sets a generator polynomial.</span>
+
+<span class="sd">        :param p: the generator polynomial.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Poly</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span> <span class="o">=</span> <span class="n">p2a</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BCH.encode"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.bch.BCH.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">encoder</span><span class="o">=</span><span class="n">Encoder</span><span class="o">.</span><span class="n">systematic</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Wrapper method for encoding, that can be</span>
+<span class="sd">        wether systematic on non-systematic.</span>
+
+<span class="sd">        :param messages: The messages to encode (as bit streams).</span>
+<span class="sd">        :param encoder: The encoder to use, must be an instance</span>
+<span class="sd">            of `Encoder` class</span>
+<span class="sd">        :return: The codewords.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">encoder</span> <span class="o">==</span> <span class="n">Encoder</span><span class="o">.</span><span class="n">systematic</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_systematic_encode</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">encoder</span> <span class="o">==</span> <span class="n">Encoder</span><span class="o">.</span><span class="n">non_systematic</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_non_systematic_encode</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unsupported encoder type&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_systematic_encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Systematic encoding process.</span>
+<span class="sd">        :param messages: the messages to encode</span>
+<span class="sd">        :return: The codewords.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">messages</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Messages must be of length k bits&quot;</span><span class="p">)</span>
+
+        <span class="n">x_nk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">x_nk</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x_nk</span><span class="p">)</span>
+        <span class="c1"># Multiply the message polynomial by x^(n-k)</span>
+        <span class="n">shift_m_poly</span> <span class="o">=</span> <span class="n">p_mul</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">x_nk</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;shifted&quot;</span><span class="p">,</span> <span class="n">shift_m_poly</span><span class="p">)</span>
+        <span class="c1"># Divide the result by the generator polynomial</span>
+        <span class="c1"># and keep the reminder d(x)</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">r_poly</span> <span class="o">=</span> <span class="n">p_div</span><span class="p">(</span><span class="n">shift_m_poly</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;g_poly&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;r_poly&quot;</span><span class="p">,</span> <span class="n">r_poly</span><span class="p">)</span>
+        <span class="c1"># the codeword is x^(n-k)m(x) - d(x)</span>
+        <span class="k">return</span> <span class="n">p_add</span><span class="p">(</span><span class="n">shift_m_poly</span><span class="p">,</span> <span class="n">r_poly</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_non_systematic_encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Systematic encoding process.</span>
+<span class="sd">        :param messages: the messages to encode</span>
+<span class="sd">        :return: The codewords.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">p_mul</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_poly</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Timoï.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

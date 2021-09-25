@@ -21,13 +21,16 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+Symmetric primitives
+====================
+
 AES helper functions
 ---------------------
 This module implements several AES sub functions.
 
 .. automodule:: npcrypto.aes_utils
    :members:
-   :undoc-members:
+   :undoc-members: __init__
    :show-inheritance:
 
 AES
@@ -35,6 +38,7 @@ AES
 .. automodule:: npcrypto.aes
    :members:
    :undoc-members:
+   :special-members:
    :show-inheritance:
 
 Keccak
@@ -45,3 +49,35 @@ The Keccak cryptographic permutation is used within several cryptosystems such a
    :members:
    :undoc-members:
    :show-inheritance:
+
+Error correcting codes
+=======================
+Error correcting codes are heavily used when data can suffer transmition or storage errors.
+Thus we developped several functions in order to perform error correction in a Numpy friendly way.
+
+Polynomial operations under Galois field
+----------------------------------------
+This module aims at providing polynomial operations on multidimentionnal Numpy arrays. 
+
+.. automodule:: npcrypto.codes.poly_gf2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Error correcting codes polynomial helpers
+-----------------------------------------
+Implementation (mostly in Sympy) of useful polynomal function upon cyclic codes.
+
+.. automodule:: npcrypto.codes.polynomial_helpers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+BCH (Bose–Chaudhuri–Hocquenghem) codes 
+-----------------------------------------
+.. automodule:: npcrypto.codes.bch
+   :members:
+   :undoc-members:
+   :special-members: __init__
+   :show-inheritance:
+

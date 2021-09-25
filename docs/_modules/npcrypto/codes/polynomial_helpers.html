@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>npcrypto.codes.polynomial_helpers &mdash; npCrypto 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> npCrypto
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">npCrypto</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>npcrypto.codes.polynomial_helpers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for npcrypto.codes.polynomial_helpers</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sympy.abc</span> <span class="kn">import</span> <span class="n">x</span><span class="p">,</span> <span class="n">alpha</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">GF</span><span class="p">,</span> <span class="n">Poly</span><span class="p">,</span> <span class="n">lcm</span><span class="p">,</span> <span class="n">ZZ</span>
+<span class="kn">from</span> <span class="nn">sympy.polys.galoistools</span> <span class="kn">import</span> <span class="n">gf_irreducible</span><span class="p">,</span> <span class="n">gf_irreducible_p</span>
+<span class="c1"># http://www.comlab.hut.fi/studies/3410/slides_08_6_4.pdf</span>
+<span class="c1"># https://github.com/jkrauze/bch/tree/master/bch</span>
+<span class="c1"># https://github.com/popcornell/pyGF2</span>
+
+
+<div class="viewcode-block" id="power_dict"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.polynomial_helpers.power_dict">[docs]</a><span class="k">def</span> <span class="nf">power_dict</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">irr</span><span class="p">:</span> <span class="n">Poly</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes all the apha^i modulo an irreductible polynomial</span>
+<span class="sd">    for i up to n+1 on a Galois field over p</span>
+
+<span class="sd">    :param n: Maximum power to consider.</span>
+<span class="sd">    :param irr: An irreductible polynomial.</span>
+<span class="sd">    :param p: prime number on whih the Galois field is defined.</span>
+
+<span class="sd">    :return powers: A dictionnary whose keys are the polynomials</span>
+<span class="sd">        coefficients and values are the alpha power.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">powers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">test_poly</span> <span class="o">=</span> <span class="p">(</span><span class="n">Poly</span><span class="p">(</span><span class="n">alpha</span><span class="o">**</span><span class="n">i</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">%</span> <span class="n">irr</span><span class="p">)</span><span class="o">.</span><span class="n">set_domain</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+        <span class="n">powers</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">test_poly</span><span class="o">.</span><span class="n">all_coeffs</span><span class="p">())]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">powers</span></div>
+
+
+<div class="viewcode-block" id="minimal_poly"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.polynomial_helpers.minimal_poly">[docs]</a><span class="k">def</span> <span class="nf">minimal_poly</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find the minimal polynomial defined by the cyclotomoc coset.</span>
+<span class="sd">    :param i: The power of alpha.</span>
+<span class="sd">    :param n: The size of the code.</span>
+<span class="sd">    :param q: The base of the Gallois field.</span>
+<span class="sd">    :param irr_poly: The irreductible polynomial.</span>
+<span class="sd">    :return: The minimal polynomial if found, None otherwise.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ti</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">checked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">checked</span><span class="p">[</span><span class="n">ti</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Poly</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">**</span><span class="n">ti</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="p">(</span><span class="n">ti</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span>
+        <span class="k">if</span> <span class="n">checked</span><span class="p">[</span><span class="n">ti</span><span class="p">]:</span>
+            <span class="n">polys</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Poly</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">%</span> <span class="n">irr_poly</span><span class="p">)</span><span class="o">.</span><span class="n">trunc</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">poly</span><span class="o">.</span><span class="n">all_coeffs</span><span class="p">()]</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">polys</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t find minimal polynomial&quot;</span><span class="p">)</span>
+            <span class="n">coeffs</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">nth</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">polys</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">Poly</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">checked</span><span class="p">[</span><span class="n">ti</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">poly</span> <span class="o">=</span> <span class="n">poly</span> <span class="o">*</span> <span class="n">Poly</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">**</span><span class="n">ti</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="all_minimal_poly"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.polynomial_helpers.all_minimal_poly">[docs]</a><span class="k">def</span> <span class="nf">all_minimal_poly</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">:</span> <span class="n">Poly</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes all minimal polynomials from alpha to alpha^2t.</span>
+
+<span class="sd">    :param n: Size of the code.</span>
+<span class="sd">    :param t: Maximum number of errors.</span>
+<span class="sd">    :param irr_poly: irreductible polynomial.</span>
+<span class="sd">    :param q: base of the Gallois field.</span>
+<span class="sd">    :return m_ps: a (k, v) dictionnary, the keys are</span>
+<span class="sd">        the polynomials and values are the powers of alpha.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">m_ps</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">m_ps</span><span class="p">[</span><span class="n">minimal_poly</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Every even power of alpha in this sequence has the same</span>
+    <span class="c1"># minimal polynomial as some preceding odd power of alpha.</span>
+    <span class="c1"># (equation 6.3 of Error control Coding, fundamentals and applications).</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">min_poly</span> <span class="o">=</span> <span class="n">minimal_poly</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">)</span>
+        <span class="c1"># Only keep one instance of the polynomial</span>
+        <span class="k">if</span> <span class="n">min_poly</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">m_ps</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">m_ps</span><span class="p">[</span><span class="n">min_poly</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">m_ps</span></div>
+
+
+<div class="viewcode-block" id="get_irr_poly"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.polynomial_helpers.get_irr_poly">[docs]</a><span class="k">def</span> <span class="nf">get_irr_poly</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Get irreductible polynomial for the given parameters.</span>
+<span class="sd">    An irreductible polynomial over GF(2) of degree m divides X^n + 1,</span>
+<span class="sd">    with n = 2^m-1.</span>
+
+<span class="sd">    :param m: polynomial&#39;s degree.</span>
+<span class="sd">    :param q: base prime of the Galois field (default 2).</span>
+<span class="sd">    :return: the irreductible polynomial.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">irr_poly</span> <span class="o">=</span> <span class="n">Poly</span><span class="p">(</span><span class="n">alpha</span><span class="o">**</span><span class="n">m</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">set_domain</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+    <span class="c1"># If the polynomial is irreductible, update the quotient size</span>
+    <span class="k">if</span> <span class="n">gf_irreducible_p</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">irr_poly</span><span class="o">.</span><span class="n">all_coeffs</span><span class="p">()],</span> <span class="n">q</span><span class="p">,</span> <span class="n">ZZ</span><span class="p">):</span>
+        <span class="n">quotient_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">power_dict</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">quotient_size</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">quotient_size</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="c1"># TODO: Could cause infinite loops, correct this</span>
+        <span class="n">irr_poly</span> <span class="o">=</span> <span class="n">Poly</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">numerator</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">gf_irreducible</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">ZZ</span><span class="p">)],</span>
+                        <span class="n">alpha</span><span class="p">)</span>
+        <span class="n">quotient_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">power_dict</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">irr_poly</span></div>
+
+
+<div class="viewcode-block" id="get_gen_poly"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.polynomial_helpers.get_gen_poly">[docs]</a><span class="k">def</span> <span class="nf">get_gen_poly</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generate a generator polynomial G(X).</span>
+<span class="sd">    Let alpha be a primitive element in GF(2^m).</span>
+<span class="sd">    The generator polynomial of a t-error-correcting</span>
+<span class="sd">    BCH code of length 2^m - 1 is the lowest-degree polynomial</span>
+<span class="sd">    over GF(2) which have alpha, alpha^2 ... alpha^2t as its roots.</span>
+<span class="sd">    Let Mi(X) be the minimal polynomial for alpha^i,</span>
+<span class="sd">    the G(X) = LCM{M1(X),...,M2t(X)}.</span>
+
+<span class="sd">    :param m: dimention of the Galois field q^m.</span>
+<span class="sd">    :param t: the number of errors that can be corrected.</span>
+<span class="sd">    :param q: base prime of the Galois field (default 2).</span>
+<span class="sd">    :return: a tuple (irr_poly, g_poly) containing the irreductible</span>
+<span class="sd">        polynomial and the generator polynomial.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># TODO: Raise errors if theorems are not validated</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">irr_poly</span> <span class="o">=</span> <span class="n">get_irr_poly</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">m_ps</span> <span class="o">=</span> <span class="n">all_minimal_poly</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">irr_poly</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">m_ps</span><span class="p">)</span>
+    <span class="n">g_poly</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">lcm</span><span class="p">,</span> <span class="n">m_ps</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">g_poly</span> <span class="o">=</span> <span class="n">g_poly</span><span class="o">.</span><span class="n">trunc</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">irr_poly</span><span class="p">,</span> <span class="n">g_poly</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Timoï.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

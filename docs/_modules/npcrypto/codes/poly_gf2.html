@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>npcrypto.codes.poly_gf2 &mdash; npCrypto 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> npCrypto
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">npCrypto</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>npcrypto.codes.poly_gf2</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for npcrypto.codes.poly_gf2</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.fft</span> <span class="kn">import</span> <span class="n">fft</span><span class="p">,</span> <span class="n">ifft</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">Poly</span><span class="p">,</span> <span class="n">GF</span>
+<span class="kn">from</span> <span class="nn">sympy.abc</span> <span class="kn">import</span> <span class="n">x</span>
+<span class="c1"># https://github.com/popcornell/pyGF2</span>
+
+
+<div class="viewcode-block" id="strip_zeros"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.strip_zeros">[docs]</a><span class="k">def</span> <span class="nf">strip_zeros</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Strip un-necessary leading (rightmost) zeroes</span>
+<span class="sd">    from a polynomial</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">trim_zeros</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">trim</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="deg"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.deg">[docs]</a><span class="k">def</span> <span class="nf">deg</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the degree of polynomials.</span>
+
+<span class="sd">    :param a: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients or 1 polynomial of m coefficients.</span>
+<span class="sd">    :return deg: The degree of the provided polynomial,</span>
+<span class="sd">        array like when mulptiple polynomials provided.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        This function can be optimized by using numpy buildin functions.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">e</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="indep_roll"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.indep_roll">[docs]</a><span class="k">def</span> <span class="nf">indep_roll</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">shifts</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Rolls rows of a matrix independently, inspired by:</span>
+<span class="sd">    https://stackoverflow.com/questions/20360675/roll-rows-of-a-matrix-independently</span>
+
+<span class="sd">    :param a: (n, m) numpy ndarray.</span>
+<span class="sd">    :param shifts: n array of right shifts (negative values for left shift).</span>
+
+<span class="sd">    - Example::</span>
+
+<span class="sd">        &gt;&gt;&gt; A = np.array([[1,2,3,4],</span>
+<span class="sd">        ...               [1,2,3,4],</span>
+<span class="sd">        ...               [1,2,3,4]])</span>
+<span class="sd">        &gt;&gt;&gt; r = np.array([1,-1,3])</span>
+<span class="sd">        &gt;&gt;&gt; indep_roll(A, r)</span>
+<span class="sd">        np.array([[4, 1, 2, 3],</span>
+<span class="sd">                  [2, 3, 4, 1],</span>
+<span class="sd">                  [2, 3, 4, 1]])</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span>
+        <span class="n">ifft</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">shifts</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]),</span>
+             <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">())</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="a2p"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.a2p">[docs]</a><span class="k">def</span> <span class="nf">a2p</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts nparray based polynomials to Sympy polynomials.</span>
+
+<span class="sd">    :param a: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients or 1 polynomial of m coefficients.</span>
+<span class="sd">    :return p: A Sympy polynomial (or polynomial array).</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        This Function supposes that the rightmost</span>
+<span class="sd">        bit is the highest coefficient.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">Poly</span><span class="p">(</span><span class="n">strip_zeros</span><span class="p">(</span><span class="n">a</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">set_domain</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Poly</span><span class="p">(</span><span class="n">strip_zeros</span><span class="p">(</span><span class="n">e</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">set_domain</span><span class="p">(</span><span class="n">GF</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid shape&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="p2a"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.p2a">[docs]</a><span class="k">def</span> <span class="nf">p2a</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Poly</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts Sympy polynomial to numpy array.</span>
+
+<span class="sd">    :param p: Sympy polynomial.</span>
+<span class="sd">    :param size: Size of the resulting numpy array.</span>
+<span class="sd">    :return a: The numpy array representing the polynomial.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">coeffs</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">all_coeffs</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Provided size too small&quot;</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">coeffs</span><span class="p">)]</span> <span class="o">=</span> <span class="n">coeffs</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="p_add"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.p_add">[docs]</a><span class="k">def</span> <span class="nf">p_add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Add two polynomials in GF(2)[x].</span>
+
+<span class="sd">    :param a: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients or 1 polynomial of m coefficients.</span>
+<span class="sd">    :param b: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span></div>
+
+
+<div class="viewcode-block" id="p_mul"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.p_mul">[docs]</a><span class="k">def</span> <span class="nf">p_mul</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">use_fft</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Multiply polynomials in GF(2)[x].</span>
+
+<span class="sd">    :param a: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients or 1 polynomial of m coefficients.</span>
+<span class="sd">    :param b: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients.</span>
+<span class="sd">    :param fft: Uses fft by default because it speeds up</span>
+<span class="sd">        computations for big arrays.</span>
+<span class="sd">        If multiple calls of this function on 1D arrays are required,</span>
+<span class="sd">        using a convolution (i.e., setting fft to False) can raise</span>
+<span class="sd">        better performances.</span>
+<span class="sd">        Convolution is available for 1D arrays only.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">        This Function supposes that the rightmost</span>
+<span class="sd">        bit is the highest coefficient.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">use_fft</span><span class="p">:</span>
+        <span class="n">fsize</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">fsize</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">fsize</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">fslice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fsize</span><span class="p">)</span>
+        <span class="n">ta</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">fsize</span><span class="p">)</span>
+        <span class="n">tb</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">fsize</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">ta</span> <span class="o">*</span> <span class="n">tb</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="n">fslice</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">res</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Convolution is only implemented for 1D arrays&quot;</span><span class="p">)</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">k</span></div>
+
+
+<div class="viewcode-block" id="p_div"><a class="viewcode-back" href="../../../index.html#npcrypto.codes.poly_gf2.p_div">[docs]</a><span class="k">def</span> <span class="nf">p_div</span><span class="p">(</span><span class="n">dividend</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">divisor</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Divide dividend polynomial by divisor polynomial.</span>
+
+<span class="sd">    :param dividend: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients or 1 polynomial of m coefficients.</span>
+<span class="sd">    :param divisor: (n,m) ndarray of n polynomials defined</span>
+<span class="sd">        on m coefficients or 1 polynomial of m coefficients.</span>
+<span class="sd">    :return (q, r): quotient and remainder polynomials</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dividend</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">divisor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid shape&quot;</span><span class="p">)</span>
+
+    <span class="c1"># By default, final shape is 2</span>
+    <span class="n">final_shape</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># If dividend is 1d and divisor is 1d, make those two arrays 2D</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dividend</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">divisor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">dividend</span> <span class="o">=</span> <span class="n">dividend</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">divisor</span> <span class="o">=</span> <span class="n">divisor</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">final_shape</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># If dividend is 1d and divisor is 2d, extend dividend array</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dividend</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">divisor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">dividend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="n">dividend</span><span class="p">],</span> <span class="n">repeats</span><span class="o">=</span><span class="n">divisor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># If dividend is 2d and divisor is 1d, extend divisor array</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dividend</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">divisor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">divisor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">([</span><span class="n">divisor</span><span class="p">],</span> <span class="n">repeats</span><span class="o">=</span><span class="n">dividend</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">u</span> <span class="o">=</span> <span class="n">dividend</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dividend</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">divisor</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">v</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="n">divisor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">divisor</span>
+    <span class="c1"># Get the degree of each polynomial</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">deg</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">deg</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">divisor</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s2">&quot;polynomial division&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Keep track of valid divisions</span>
+    <span class="c1"># (i.e, polynomials that can actually be divided)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">m</span>
+    <span class="c1"># Compute shifting factors and roll polynomials</span>
+    <span class="n">sh</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">indep_roll</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">sh</span><span class="p">)</span>
+    <span class="c1"># Initialize result arrays</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="c1"># Euclid&#39;s algorithm</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="c1"># Get the polynomials that can divide</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">sh</span>
+        <span class="n">do_divide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">indexes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="c1"># TODO: optimize this loop</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">indexes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">do_divide</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                            <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">valid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">r</span><span class="p">[</span><span class="n">do_divide</span><span class="p">]</span> <span class="o">^=</span> <span class="n">v</span><span class="p">[</span><span class="n">do_divide</span><span class="p">]</span>
+        <span class="n">q</span><span class="p">[</span><span class="n">do_divide</span><span class="p">,</span> <span class="n">sh</span><span class="p">[</span><span class="n">do_divide</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Get the polynomials that can be rolled</span>
+        <span class="n">do_roll</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sh</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># Roll them</span>
+        <span class="n">v</span><span class="p">[</span><span class="n">do_roll</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">do_roll</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sh</span><span class="p">[</span><span class="n">do_roll</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="c1"># Last iteration is done out of the loop</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">sh</span>
+    <span class="n">do_divide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">indexes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="c1"># TODO: optimize this loop</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">indexes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">do_divide</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">indexes</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">valid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">r</span><span class="p">[</span><span class="n">do_divide</span><span class="p">]</span> <span class="o">^=</span> <span class="n">v</span><span class="p">[</span><span class="n">do_divide</span><span class="p">]</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">do_divide</span><span class="p">,</span> <span class="n">sh</span><span class="p">[</span><span class="n">do_divide</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">final_shape</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Timoï.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

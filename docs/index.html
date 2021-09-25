@@ -38,10 +38,17 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">Welcome to npCrypto’s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#symmetric-primitives">Symmetric primitives</a><ul>
 <li><a class="reference internal" href="#aes-helper-functions">AES helper functions</a></li>
 <li><a class="reference internal" href="#module-npcrypto.aes">AES</a></li>
 <li><a class="reference internal" href="#keccak">Keccak</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#error-correcting-codes">Error correcting codes</a><ul>
+<li><a class="reference internal" href="#polynomial-operations-under-galois-field">Polynomial operations under Galois field</a></li>
+<li><a class="reference internal" href="#error-correcting-codes-polynomial-helpers">Error correcting codes polynomial helpers</a></li>
+<li><a class="reference internal" href="#module-npcrypto.codes.bch">BCH (Bose–Chaudhuri–Hocquenghem) codes</a></li>
 </ul>
 </li>
 </ul>
@@ -83,6 +90,9 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+</section>
+<section id="symmetric-primitives">
+<h1>Symmetric primitives<a class="headerlink" href="#symmetric-primitives" title="Permalink to this headline"></a></h1>
 <section id="aes-helper-functions">
 <h2>AES helper functions<a class="headerlink" href="#aes-helper-functions" title="Permalink to this headline"></a></h2>
 <p>This module implements several AES sub functions.</p>
@@ -221,6 +231,33 @@ function.</p>
 <dt class="sig sig-object py" id="npcrypto.aes.AES">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">npcrypto.aes.</span></span><span class="sig-name descname"><span class="pre">AES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes.html#AES"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes.AES" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="npcrypto.aes.AES.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"> <span class="pre">=</span> <span class="pre">mappingproxy({'__module__':</span> <span class="pre">'npcrypto.aes',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">AES.__init__&gt;,</span> <span class="pre">'encrypt':</span> <span class="pre">&lt;function</span> <span class="pre">AES.encrypt&gt;,</span> <span class="pre">'decrypt':</span> <span class="pre">&lt;function</span> <span class="pre">AES.decrypt&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'AES'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'AES'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__doc__':</span> <span class="pre">None,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#npcrypto.aes.AES.__dict__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="npcrypto.aes.AES.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes.html#AES.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes.AES.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Setup aes key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – (4, 4) array key</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="npcrypto.aes.AES.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'npcrypto.aes'</span></em><a class="headerlink" href="#npcrypto.aes.AES.__module__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="npcrypto.aes.AES.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#npcrypto.aes.AES.__weakref__" title="Permalink to this definition"></a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="npcrypto.aes.AES.decrypt">
 <span class="sig-name descname"><span class="pre">decrypt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/aes.html#AES.decrypt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.aes.AES.decrypt" title="Permalink to this definition"></a></dt>
@@ -431,6 +468,344 @@ Uses a precomputed permutation matrix.</p>
 <dd class="field-even"><p>The updated states.</p>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="error-correcting-codes">
+<h1>Error correcting codes<a class="headerlink" href="#error-correcting-codes" title="Permalink to this headline"></a></h1>
+<p>Error correcting codes are heavily used when data can suffer transmition or storage errors.
+Thus we developped several functions in order to perform error correction in a Numpy friendly way.</p>
+<section id="polynomial-operations-under-galois-field">
+<h2>Polynomial operations under Galois field<a class="headerlink" href="#polynomial-operations-under-galois-field" title="Permalink to this headline"></a></h2>
+<p>This module aims at providing polynomial operations on multidimentionnal Numpy arrays.</p>
+<span class="target" id="module-npcrypto.codes.poly_gf2"></span><dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.a2p">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">a2p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#a2p"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.a2p" title="Permalink to this definition"></a></dt>
+<dd><p>Converts nparray based polynomials to Sympy polynomials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients or 1 polynomial of m coefficients.</p>
+</dd>
+<dt class="field-even">Return p</dt>
+<dd class="field-even"><p>A Sympy polynomial (or polynomial array).</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This Function supposes that the rightmost
+bit is the highest coefficient.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.deg">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">deg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#deg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.deg" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the degree of polynomials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients or 1 polynomial of m coefficients.</p>
+</dd>
+<dt class="field-even">Return deg</dt>
+<dd class="field-even"><p>The degree of the provided polynomial,
+array like when mulptiple polynomials provided.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This function can be optimized by using numpy buildin functions.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.indep_roll">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">indep_roll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shifts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#indep_roll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.indep_roll" title="Permalink to this definition"></a></dt>
+<dd><p>Rolls rows of a matrix independently, inspired by:
+<a class="reference external" href="https://stackoverflow.com/questions/20360675/roll-rows-of-a-matrix-independently">https://stackoverflow.com/questions/20360675/roll-rows-of-a-matrix-independently</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – (n, m) numpy ndarray.</p></li>
+<li><p><strong>shifts</strong> – n array of right shifts (negative values for left shift).</p></li>
+</ul>
+</dd>
+</dl>
+<ul>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>              <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indep_roll</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+<span class="go">np.array([[4, 1, 2, 3],</span>
+<span class="go">          [2, 3, 4, 1],</span>
+<span class="go">          [2, 3, 4, 1]])</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.p2a">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">p2a</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">sympy.polys.polytools.Poly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#p2a"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.p2a" title="Permalink to this definition"></a></dt>
+<dd><p>Converts Sympy polynomial to numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – Sympy polynomial.</p></li>
+<li><p><strong>size</strong> – Size of the resulting numpy array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return a</dt>
+<dd class="field-even"><p>The numpy array representing the polynomial.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.p_add">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">p_add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#p_add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.p_add" title="Permalink to this definition"></a></dt>
+<dd><p>Add two polynomials in GF(2)[x].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients or 1 polynomial of m coefficients.</p></li>
+<li><p><strong>b</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.p_div">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">p_div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dividend</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divisor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#p_div"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.p_div" title="Permalink to this definition"></a></dt>
+<dd><p>Divide dividend polynomial by divisor polynomial.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dividend</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients or 1 polynomial of m coefficients.</p></li>
+<li><p><strong>divisor</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients or 1 polynomial of m coefficients.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (q, r)</dt>
+<dd class="field-even"><p>quotient and remainder polynomials</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.p_mul">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">p_mul</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#p_mul"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.p_mul" title="Permalink to this definition"></a></dt>
+<dd><p>Multiply polynomials in GF(2)[x].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients or 1 polynomial of m coefficients.</p></li>
+<li><p><strong>b</strong> – (n,m) ndarray of n polynomials defined
+on m coefficients.</p></li>
+<li><p><strong>fft</strong> – Uses fft by default because it speeds up
+computations for big arrays.
+If multiple calls of this function on 1D arrays are required,
+using a convolution (i.e., setting fft to False) can raise
+better performances.
+Convolution is available for 1D arrays only.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This Function supposes that the rightmost
+bit is the highest coefficient.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.poly_gf2.strip_zeros">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.poly_gf2.</span></span><span class="sig-name descname"><span class="pre">strip_zeros</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/poly_gf2.html#strip_zeros"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.poly_gf2.strip_zeros" title="Permalink to this definition"></a></dt>
+<dd><p>Strip un-necessary leading (rightmost) zeroes
+from a polynomial</p>
+</dd></dl>
+
+</section>
+<section id="error-correcting-codes-polynomial-helpers">
+<h2>Error correcting codes polynomial helpers<a class="headerlink" href="#error-correcting-codes-polynomial-helpers" title="Permalink to this headline"></a></h2>
+<p>Implementation (mostly in Sympy) of useful polynomal function upon cyclic codes.</p>
+<span class="target" id="module-npcrypto.codes.polynomial_helpers"></span><dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.polynomial_helpers.all_minimal_poly">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.polynomial_helpers.</span></span><span class="sig-name descname"><span class="pre">all_minimal_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irr_poly</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">sympy.polys.polytools.Poly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/polynomial_helpers.html#all_minimal_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.polynomial_helpers.all_minimal_poly" title="Permalink to this definition"></a></dt>
+<dd><p>Computes all minimal polynomials from alpha to alpha^2t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Size of the code.</p></li>
+<li><p><strong>t</strong> – Maximum number of errors.</p></li>
+<li><p><strong>irr_poly</strong> – irreductible polynomial.</p></li>
+<li><p><strong>q</strong> – base of the Gallois field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return m_ps</dt>
+<dd class="field-even"><p>a (k, v) dictionnary, the keys are
+the polynomials and values are the powers of alpha.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.polynomial_helpers.get_gen_poly">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.polynomial_helpers.</span></span><span class="sig-name descname"><span class="pre">get_gen_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/polynomial_helpers.html#get_gen_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.polynomial_helpers.get_gen_poly" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a generator polynomial G(X).
+Let alpha be a primitive element in GF(2^m).
+The generator polynomial of a t-error-correcting
+BCH code of length 2^m - 1 is the lowest-degree polynomial
+over GF(2) which have alpha, alpha^2 … alpha^2t as its roots.
+Let Mi(X) be the minimal polynomial for alpha^i,
+the G(X) = LCM{M1(X),…,M2t(X)}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> – dimention of the Galois field q^m.</p></li>
+<li><p><strong>t</strong> – the number of errors that can be corrected.</p></li>
+<li><p><strong>q</strong> – base prime of the Galois field (default 2).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple (irr_poly, g_poly) containing the irreductible
+polynomial and the generator polynomial.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.polynomial_helpers.get_irr_poly">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.polynomial_helpers.</span></span><span class="sig-name descname"><span class="pre">get_irr_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/polynomial_helpers.html#get_irr_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.polynomial_helpers.get_irr_poly" title="Permalink to this definition"></a></dt>
+<dd><p>Get irreductible polynomial for the given parameters.
+An irreductible polynomial over GF(2) of degree m divides X^n + 1,
+with n = 2^m-1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> – polynomial’s degree.</p></li>
+<li><p><strong>q</strong> – base prime of the Galois field (default 2).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the irreductible polynomial.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.polynomial_helpers.minimal_poly">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.polynomial_helpers.</span></span><span class="sig-name descname"><span class="pre">minimal_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irr_poly</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/polynomial_helpers.html#minimal_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.polynomial_helpers.minimal_poly" title="Permalink to this definition"></a></dt>
+<dd><p>Find the minimal polynomial defined by the cyclotomoc coset.
+:param i: The power of alpha.
+:param n: The size of the code.
+:param q: The base of the Gallois field.
+:param irr_poly: The irreductible polynomial.
+:return: The minimal polynomial if found, None otherwise.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="npcrypto.codes.polynomial_helpers.power_dict">
+<span class="sig-prename descclassname"><span class="pre">npcrypto.codes.polynomial_helpers.</span></span><span class="sig-name descname"><span class="pre">power_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">irr</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">sympy.polys.polytools.Poly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/polynomial_helpers.html#power_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.polynomial_helpers.power_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Computes all the apha^i modulo an irreductible polynomial
+for i up to n+1 on a Galois field over p</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Maximum power to consider.</p></li>
+<li><p><strong>irr</strong> – An irreductible polynomial.</p></li>
+<li><p><strong>p</strong> – prime number on whih the Galois field is defined.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return powers</dt>
+<dd class="field-even"><p>A dictionnary whose keys are the polynomials
+coefficients and values are the alpha power.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-npcrypto.codes.bch">
+<span id="bch-bosechaudhurihocquenghem-codes"></span><h2>BCH (Bose–Chaudhuri–Hocquenghem) codes<a class="headerlink" href="#module-npcrypto.codes.bch" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.BCH">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">npcrypto.codes.bch.</span></span><span class="sig-name descname"><span class="pre">BCH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/bch.html#BCH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.bch.BCH" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class represents a BCH code.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.BCH.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/bch.html#BCH.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.bch.BCH.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>BCH codes are designed thanks to various parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – length of the codeword.</p></li>
+<li><p><strong>m</strong> – dimention of the Galois field (2^m).</p></li>
+<li><p><strong>k</strong> – message bits.</p></li>
+<li><p><strong>t</strong> – Correction capacity of the BCH code (in bits).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.BCH.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">messages:</span> <span class="pre">numpy.ndarray</span></em>, <em class="sig-param"><span class="pre">encoder=&lt;Encoder.systematic:</span> <span class="pre">1&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/bch.html#BCH.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.bch.BCH.encode" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper method for encoding, that can be
+wether systematic on non-systematic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>messages</strong> – The messages to encode (as bit streams).</p></li>
+<li><p><strong>encoder</strong> – The encoder to use, must be an instance
+of <cite>Encoder</cite> class</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The codewords.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.BCH.set_generator">
+<span class="sig-name descname"><span class="pre">set_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/bch.html#BCH.set_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.bch.BCH.set_generator" title="Permalink to this definition"></a></dt>
+<dd><p>Sets a generator polynomial.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> – the generator polynomial.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.Encoder">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">npcrypto.codes.bch.</span></span><span class="sig-name descname"><span class="pre">Encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npcrypto/codes/bch.html#Encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#npcrypto.codes.bch.Encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>This class enumerates the different
+encoding paradigms: systematic and
+non systematic.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.Encoder.non_systematic">
+<span class="sig-name descname"><span class="pre">non_systematic</span></span><em class="property"> <span class="pre">=</span> <span class="pre">2</span></em><a class="headerlink" href="#npcrypto.codes.bch.Encoder.non_systematic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="npcrypto.codes.bch.Encoder.systematic">
+<span class="sig-name descname"><span class="pre">systematic</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#npcrypto.codes.bch.Encoder.systematic" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
